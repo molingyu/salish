@@ -26,7 +26,11 @@ cmd.option('-l, --list', '列出现有文件'){ puts "index.html\s\sconf.txt" }
 push = cmd.command('push', '上传文件')
 push.option('-a, --all', '是否上传全部') { puts '所有文件都已上传！' }
 
-# cmd.parse(%w(-v))
-# cmd.parse(%w(-h))
-# cmd.parse(%w'push -h')
+#短参数测试
+cmd.parse(%w(-v))
+#长参数测试
 cmd.parse(%w'-add')
+#帮助信息输出测试
+cmd.parse(%w(-h))
+#子命令测试
+cmd.parse(%w'push -h')
