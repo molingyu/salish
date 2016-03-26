@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = Salish::VERSION
   spec.authors       = ["shitake"]
   spec.email         = ["z1522716486@hotmail.com"]
-  spec.description   = %q{TODO: Write a gem description}
-  spec.summary       = %q{TODO: Write a gem summary}
+  spec.description   = %q{Ruby command-line tool kit}
+  spec.summary       = %q{A Ruby command-line tool kit. Support for multiple subcommands created.}
   spec.homepage      = ""
   spec.license       = "MIT"
 
