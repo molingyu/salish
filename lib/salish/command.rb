@@ -24,7 +24,7 @@ class Salish::Command
         :long => '--help',
         :params => nil,
         :description => 'Print help info',
-        :callback => lambda{ puts @help.to_s }
+        :callback => lambda{ puts @help.to_string }
     }
     @options.push(help_opt)
   end
@@ -54,11 +54,11 @@ class Salish::Command
       params.split(',').each do |param|
         param = param.split(':')
         if param.size == 2
-          type = param[0]
-          name = param[1]
+          type = param[0].strip
+          name = param[1].strip
         else
           type = 'string'
-          name = param[0]
+          name = param[0].strip
         end
         list << {:type => type, :name => name}
       end
