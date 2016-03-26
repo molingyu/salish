@@ -4,11 +4,10 @@
 
 require '../lib/salish'
 
-cmd = Salish.cmd
+cmd = Salish::Command.new('test')
 cmd.version('1.0.1')
 
 cmd.help do |h|
-  h.title = '测试命令'
   h.body = '这是一个控制台命令的测试命令。你可以通过-h或者--help来查看帮助！'
   h.footer = \
   "用例:\n"\
@@ -18,15 +17,16 @@ cmd.help do |h|
   "  添加参数:\n\tcmd.option('-a, --add', '添加文件', 'string:path'){|param| puts '文件路径',param[:path] }\n"
 end
 
-cmd.option('-a, --add', '从指定路径载入文件', 'string:path') do |p|
+cmd.option('-a, --add', '<s:path> 从指定路径载入文件。', 'string:path') do |p|
   puts '文件路径：',p[:path]
 end
 
 cmd.option('-l, --list', '列出现有文件'){ puts "index.html\s\sconf.txt" }
-cmd.command('push', '上传文件').option('-a, --all', '是否上传全部') { puts '所有文件都已上传！' }
 
+push = cmd.command('push', '上传文件')
+push.option('-a, --all', '是否上传全部') { puts '所有文件都已上传！' }
 
-cmd.parse(%w(-v))
-cmd.parse(%w(-h))
-cmd.parse(%w'push -a')
-cmd.parse(%w'-a /home/site/www')
+# cmd.parse(%w(-v))
+# cmd.parse(%w(-h))
+# cmd.parse(%w'push -h')
+cmd.parse(%w'-add')

@@ -9,7 +9,9 @@ class Salish::Command
   attr_reader :options
   attr_accessor :parent
   attr_accessor :description
-  def initialize(name = 'root')
+
+  def initialize(name = nil)
+    raise "Error: Command Name Error(#{name})!" unless name
     @name = name
     @help = Salish::Help.new(self)
     @parent = self
@@ -27,9 +29,9 @@ class Salish::Command
     @options.push(help_opt)
   end
 
-  # raise "version error!(#{ver_str})"
-  def version(ver_str)
-     Salish.error('') unless Salish.version_str?(ver_str)
+  def version(ver_str = nil)
+    return @version unless ver_str
+    raise "Error: Version Error(#{ver_str})!" unless Salish.version_str?(ver_str)
     @version = ver_str
     version_opt = {
         :short => '-v',
@@ -41,7 +43,7 @@ class Salish::Command
     @options.push(version_opt)
     self
   end
-  # ('-a, --b', 's:string, n:times, b:false', ''){}
+
   def option(flags, description, params = nil, &callback)
     list = []
     flags.split(',').each{|flag| list << flag.strip}
@@ -51,7 +53,6 @@ class Salish::Command
       list = []
       params.split(',').each do |param|
         param = param.split(':')
-        #type = name = ''
         if param.size == 2
           type = param[0]
           name = param[1]
@@ -64,7 +65,6 @@ class Salish::Command
     else
       list = nil
     end
-
     opt = {
         :short => flags_short,
         :long => flags_long,
@@ -91,7 +91,6 @@ class Salish::Command
   end
 
   def parse(arvg)
-    #arvg.split('s')
     opt = arvg[0]
     param = arvg[1, arvg.size] || []
     return call_opt('long', opt, param) if /--.*/ === opt
@@ -100,7 +99,6 @@ class Salish::Command
   end
 
   private
-  # 调用参数
   def call_opt(type, option, params)
     @options.each do |opt|
       opt_name = (type == 'long' ? opt[:long] : opt[:short])
@@ -113,12 +111,16 @@ class Salish::Command
         end
       end
     end
-    Salish.error('25555')
+    puts "ERROR: option error (#{option}) ! You can use -h or --help to get help info."
+    exit
   end
 
   def opt_set_params(opt, params)
     param = {}
-    Salish.error('26666') unless opt[:params].size <= params.size
+    unless opt[:params].size <= params.size
+      puts "ERROR: wrong number of arguments (#{params.size} for #{opt[:params].size}) .\n#{opt[:short]}\s#{opt[:long]}\t#{opt[:description]}"
+      exit
+    end
     opt[:params].each_with_index do |opt_par, i|
       case opt_par[:type]
         when 'string'
@@ -130,20 +132,20 @@ class Salish::Command
         when 'symbol'
           param[opt_par[:name].to_sym] = params[i].to_sym
         else
-          Salish.error('24444')
+          raise "Error: Param Type Error(#{opt_par[:name]}:#{opt_par[:type]})!"
       end
     end
     param
   end
 
-  # 调用子命令
   def call_cmd(command, arvg)
     @commands.each do |cmd|
       if command == cmd.name
         return cmd.parse(arvg)
       end
     end
-    Salish.error('')
+    puts "ERROR: command not find (#{command}) ! You can use -h or --help to get help info."
+    exit
   end
 
 end

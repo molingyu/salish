@@ -4,4 +4,9 @@
 
 class Salish::Error
 
+  def initialize(error_code)
+
+  end
+
+  def error_info
 end
