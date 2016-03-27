@@ -50,7 +50,8 @@ class Salish::Help
     else
       @options = ''
     end
-    @commands + @options != '' ? "#{@commands}\n#{@options}\n" : ''
+    "#{@commands}#{("\n" if @commands != '')}" + \
+    "#{@options}#{("\n" if @options != '')}"
   end
 
   def to_string

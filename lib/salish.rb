@@ -3,7 +3,7 @@
 #data: 16-3-26
 
 module Salish
-  require 'salish/help'
+  require '/home/shitake/work space/molingyu/salish/lib/salish/help.rb'
   require 'salish/version'
   require 'salish/command'
   class << self
