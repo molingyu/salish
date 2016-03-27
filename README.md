@@ -14,7 +14,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install salish
+    $ gem install salish --pre
 
 ## Usage
 #### 载入库并创建命令
